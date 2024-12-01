@@ -8,7 +8,9 @@ def main():
     left, right = parse_input_data(input_data)
 
     total_distance = get_total_distance(left, right)
-    print(total_distance)
+    print(f'Total distance = {total_distance}')
+    similarity_score = get_similarity_score(left, right)
+    print(f'Similarity score = {similarity_score}')
 
 
 # Parse data into lists (left and right)
@@ -38,6 +40,15 @@ def get_total_distance(left_locations: list[str], right_locations: list[str]) ->
         total_distance += distance
 
     return total_distance
+
+
+def get_similarity_score(left_locations: list[str], right_locations: list[str]) -> int:
+    similarity_score: int = 0
+    for location_id in left_locations:
+        similarity = int(location_id) * right_locations.count(location_id)
+        similarity_score += similarity
+
+    return similarity_score
 
 
 
