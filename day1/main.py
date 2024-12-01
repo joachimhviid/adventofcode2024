@@ -5,28 +5,39 @@ import re
 def main():
     input_data: TextIO = open('input.txt', 'r', encoding='utf-8')
 
-    # Parse data into lists (left and right)
+    left, right = parse_input_data(input_data)
+
+    total_distance = get_total_distance(left, right)
+    print(total_distance)
+
+
+# Parse data into lists (left and right)
+def parse_input_data(data: TextIO) -> tuple[list[str], list[str]]:
     left: list[str] = []
     right: list[str] = []
 
-    location_matches = re.finditer(r'\d+', input_data.read(), re.MULTILINE)
+    location_matches = re.finditer(r'\d+', data.read(), re.MULTILINE)
     for index, match in enumerate(location_matches):
         if index % 2 == 0:
             left.append(match.group())
         else:
             right.append(match.group())
 
+    return left, right
+
+
+def get_total_distance(left_locations: list[str], right_locations: list[str]) -> int:
     # Sort lists
-    left.sort()
-    right.sort()
+    left_locations.sort()
+    right_locations.sort()
 
     # Get the absolute value of l[0...] - r[0...] and collect them in total_distance
     total_distance: int = 0
-    for index, location_id in enumerate(left):
-        distance: int = abs(int(location_id) - int(right[index]))
+    for index, location_id in enumerate(left_locations):
+        distance: int = abs(int(location_id) - int(right_locations[index]))
         total_distance += distance
 
-    print(total_distance)
+    return total_distance
 
 
 
