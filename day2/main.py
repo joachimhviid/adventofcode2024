@@ -1,5 +1,5 @@
 import re
-from typing import TextIO, LiteralString, Literal
+from typing import TextIO
 
 """
 The levels are either all increasing or all decreasing.
@@ -27,6 +27,10 @@ def main():
     checked_reports = map(get_report_safety, reports)
     safe_reports = [status for status in checked_reports if status == True]
     print(f'Number of safe reports: {len(safe_reports)}')
+    # Lenient safety check
+    leniently_checked_reports = map(get_lenient_report_safety, reports)
+    lenient_safe_reports = [status for status in leniently_checked_reports if status == True]
+    print(f'Number of lenient safe reports: {len(lenient_safe_reports)}')
 
 
 def parse_reports(data: TextIO) -> list[list[int]]:
@@ -59,6 +63,21 @@ def get_report_safety(report: list[int]) -> bool:
             prev_ascending = is_ascending
 
     return is_safe
+
+
+def can_make_safe(report: list[int]) -> bool:
+    # Iterate through each index in the report
+    for i in range(len(report)):
+        # Create a new list excluding the current index
+        modified_report = report[:i] + report[i + 1:]
+        # Check if the modified report is safe
+        if get_report_safety(modified_report):
+            return True
+    return False
+
+
+def get_lenient_report_safety(report: list[int]) -> bool:
+    return can_make_safe(report)
 
 
 if __name__ == '__main__':
