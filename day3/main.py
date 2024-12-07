@@ -1,10 +1,16 @@
+import re
 from typing import TextIO
 
 
 def main():
-    # Read input data
     input_data: TextIO = open('input.txt', 'r', encoding='utf-8')
-    regex_str = r'mul\((\d+),(\d+)\)'
+    total: int = 0
+    instruction_matches = re.finditer(r'mul\((\d+),(\d+)\)', input_data.read())
+
+    for match in instruction_matches:
+        total += int(match.groups()[0]) * int(match.groups()[1])
+    print(total)
+
 
 if __name__ == '__main__':
     main()
